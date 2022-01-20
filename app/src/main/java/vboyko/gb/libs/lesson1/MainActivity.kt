@@ -15,20 +15,18 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
-        mainBinding.btnCounter1.setOnClickListener(listener)
-        mainBinding.btnCounter2.setOnClickListener(listener)
-        mainBinding.btnCounter3.setOnClickListener(listener)
+        val makeListener =
+            { buttonId: MainPresenter.ButtonId -> View.OnClickListener { presenter.counterClick(buttonId) } }
+        mainBinding.btnCounter1.setOnClickListener(makeListener(MainPresenter.ButtonId.BUTTON1))
+        mainBinding.btnCounter2.setOnClickListener(makeListener(MainPresenter.ButtonId.BUTTON2))
+        mainBinding.btnCounter3.setOnClickListener(makeListener(MainPresenter.ButtonId.BUTTON3))
     }
 
-    //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
-    override fun setButtonText(index: Int, text: String) {
-        when (index) {
-            0 -> mainBinding.btnCounter1.text = text
-            1 -> mainBinding.btnCounter2.text = text
-            2 -> mainBinding.btnCounter3.text = text
+    override fun setButtonText(buttonId: MainPresenter.ButtonId, text: String) {
+        when (buttonId) {
+            MainPresenter.ButtonId.BUTTON1 -> mainBinding.btnCounter1.text = text
+            MainPresenter.ButtonId.BUTTON2 -> mainBinding.btnCounter2.text = text
+            MainPresenter.ButtonId.BUTTON3 -> mainBinding.btnCounter3.text = text
         }
     }
 }
